@@ -14,4 +14,5 @@ notes.forEach(function (note) {
     </div>
   `;
 });
+// html must be ready on the page prior to using this. Add defer in html file where js script lives
 document.querySelector(".note-selectors").innerHTML = htmlString;
