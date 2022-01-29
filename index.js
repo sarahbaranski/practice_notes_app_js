@@ -1,13 +1,11 @@
-function transformNotes() {
+function transformNotes(notes) {
   return notes.slice().sort(function (a, b) {
     return b.timestamp - a.timestamp;
   });
 }
-
 function formatTimestamp(timestamp) {
   return new Date(timestamp).toUTCString();
 }
-
 function formatTitle(body) {
   var maxLength = 20;
   if (body.length > maxLength) {
@@ -20,7 +18,6 @@ function formatTitle(body) {
 }
 
 function selectNote($note) {
-  console.log("selectNote", $note);
   var $activeNote = document.querySelector(".note-selector.active");
   if ($activeNote) {
     $activeNote.classList.remove("active");
@@ -31,21 +28,43 @@ function selectNote($note) {
   document.querySelector(".note-editor-info").innerHTML = formatTimestamp(parseInt($note.dataset.timestamp));
 }
 
+function updateNote() {
+  var body = this.value;
+  var timestamp = Date.now();
+
+  var $note = document.querySelector(".note-selector.active");
+  $note.dataset.body = body;
+  $note.dataset.timestamp = timestamp;
+
+  document.querySelector(".note-editor-info").innerHTML = formatTimestamp(timestamp);
+  document.querySelector(".note-selector.active .note-selector-title").innerHTML = formatTitle(body);
+  document.querySelector(".note-selector.active .note-selector-timestamp").innerHTML = formatTimestamp(timestamp);
+
+  document.querySelector(".note-selectors").removeChild($note);
+  document.querySelector(".note-selectors").prepend($note);
+}
+
 var notes = [
   { id: 1, body: "This is a first test", timestamp: Date.now() - 300000000 },
-  { id: 2, body: "This is a second test", timestamp: Date.now() - 200000000 },
+  { id: 2, body: "This is a second test this is a very long note", timestamp: Date.now() - 200000000 },
   { id: 3, body: "", timestamp: Date.now() - 100000000 },
   { id: 4, body: "This is a fourth test", timestamp: Date.now() },
 ];
-
 var htmlString = "";
 transformNotes(notes).forEach(function (note) {
   htmlString += `
-    <div class="note-selector" onclick="selectNote(this)" data-body="${note.body}" data-timestamp="${note.timestamp}>
-    <p class="note-selector-title">${formatTitle(note.body)}</p>
-    <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
+    <div
+      class="note-selector"
+      onclick="selectNote(this)"
+      data-body="${note.body}"
+      data-timestamp="${note.timestamp}"
+    >
+      <p class="note-selector-title">${formatTitle(note.body)}</p>
+      <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
     </div>
   `;
 });
 // html must be ready on the page prior to using this. Add defer in html file where js script lives
 document.querySelector(".note-selectors").innerHTML = htmlString;
+
+document.querySelector(".note-editor-input").addEventListener("input", updateNote);
