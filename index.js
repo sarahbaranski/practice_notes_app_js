@@ -44,6 +44,23 @@ function updateNote() {
   document.querySelector(".note-selectors").prepend($note);
 }
 
+function createNote() {
+  var note = { id: Date.now(), body: "", timestamp: Date.now() };
+  var htmlString = `
+    <div
+      class="note-selector"
+      onclick="selectNote(this)"
+      data-body="${note.body}"
+      data-timestamp="${note.timestamp}"
+    >
+      <p class="note-selector-title">${formatTitle(note.body)}</p>
+      <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
+    </div>
+  `;
+  document.querySelector(".note-selectors").insertAdjacentHTML("afterbegin", htmlString);
+  document.querySelector(".note-selector").click();
+}
+
 var notes = [
   { id: 1, body: "This is a first test", timestamp: Date.now() - 300000000 },
   { id: 2, body: "This is a second test this is a very long note", timestamp: Date.now() - 200000000 },
@@ -68,3 +85,4 @@ transformNotes(notes).forEach(function (note) {
 document.querySelector(".note-selectors").innerHTML = htmlString;
 
 document.querySelector(".note-editor-input").addEventListener("input", updateNote);
+document.querySelector(".toolbar-button-new").addEventListener("click", createNote);
