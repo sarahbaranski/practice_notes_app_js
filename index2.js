@@ -25,6 +25,9 @@ function selectNote(domNote) {
   $(".note-selector").removeClass("active");
   var $note = $(domNote);
   $note.addClass("active");
+
+  $(".note-editor-input").val($note.data().body);
+  $(".note-editor-info").html(formatTimestamp($note.data().timestamp));
 }
 
 var notes = [
@@ -41,5 +44,6 @@ transformNotes(notes).forEach(function (note) {
       <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
     </div>
   `);
+  $noteSelector.data(note);
   $(".note-selectors").append($noteSelector);
 });
