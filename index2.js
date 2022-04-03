@@ -30,6 +30,21 @@ function selectNote(domNote) {
   $(".note-editor-info").html(formatTimestamp($note.data().timestamp));
 }
 
+function updateNote() {
+  var body = $(this).val();
+  var timestamp = Date.now();
+
+  var $note = $(".note-selector.active");
+  $note.data({ body: body, timestamp: timestamp });
+
+  $(".note-editor-info").html(formatTimestamp(timestamp));
+  $(".note-selector.active .note-selector-title").html(formatTitle(body));
+  $(".note-selector.active .note-selector-timestamp").html(formatTimestamp(timestamp));
+
+  $note.detach();
+  $(".note-selectors").prepend($note);
+}
+
 var notes = [
   { id: 1, body: "This is a first test", timestamp: Date.now() - 300000000 },
   { id: 2, body: "This is a second test this is a very long note", timestamp: Date.now() - 200000000 },
@@ -47,3 +62,5 @@ transformNotes(notes).forEach(function (note) {
   $noteSelector.data(note);
   $(".note-selectors").append($noteSelector);
 });
+
+$(".note-editor-input").on("input", updateNote);
