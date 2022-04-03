@@ -21,6 +21,12 @@ function formatTitle(body) {
   }
 }
 
+function selectNote(domNote) {
+  $(".note-selector").removeClass("active");
+  var $note = $(domNote);
+  $note.addClass("active");
+}
+
 var notes = [
   { id: 1, body: "This is a first test", timestamp: Date.now() - 300000000 },
   { id: 2, body: "This is a second test this is a very long note", timestamp: Date.now() - 200000000 },
@@ -30,9 +36,9 @@ var notes = [
 
 transformNotes(notes).forEach(function (note) {
   var $noteSelector = $(`
-    <div class="note-selector">
-    <p class="note-selector-title">${formatTitle(note.body)}</p>
-    <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
+    <div class="note-selector" onclick="selectNote(this)">
+      <p class="note-selector-title">${formatTitle(note.body)}</p>
+      <p class="note-selector-timestamp">${formatTimestamp(note.timestamp)}</p>
     </div>
   `);
   $(".note-selectors").append($noteSelector);
