@@ -6,6 +6,7 @@ function transformNotes(notes) {
 function formatTimestamp(timestamp) {
   return new Date(timestamp).toUTCString();
 }
+
 function formatTitle(body) {
   var maxLength = 20;
   if (body.length > maxLength) {
