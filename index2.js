@@ -71,6 +71,30 @@ function deleteNote() {
   }
 }
 
+function searchNotes() {
+  var searchText = $(this).val().toLowerCase();
+  $(".note-selector").each(function () {
+    var $note = $(this);
+    var noteText = $note.data().body.toLowerCase();
+    if (noteText.indexOf(searchText) === -1) {
+      $note.hide();
+      $note.removeClass("active");
+    } else {
+      $note.show();
+    }
+  });
+
+  if ($(".note-selector.active").length === 0) {
+    var $visibleNotes = $(".note-selector:visible");
+    if ($visibleNotes.length > 0) {
+      $visibleNotes.first().click();
+      $(".note-editor").show();
+    } else {
+      $(".note-editor").hide();
+    }
+  }
+}
+
 var notes = [
   { id: 1, body: "This is a first test", timestamp: Date.now() - 300000000 },
   { id: 2, body: "This is a second test this is a very long note", timestamp: Date.now() - 200000000 },
@@ -92,3 +116,4 @@ transformNotes(notes).forEach(function (note) {
 $(".note-editor-input").on("input", updateNote);
 $(".toolbar-button-new").on("click", createNote);
 $(".toolbar-button-delete").on("click", deleteNote);
+$(".toolbar-search").on("input", searchNotes);
